@@ -1,13 +1,8 @@
 <script setup lang="ts">
 /**
- * Kraeplin column — Vue, with a React brain.
- *
- * <script setup>  = the inside of a function component (no `return`).
- * ref             = useState, but you assign `.value` in script.
- * computed        = useMemo that tracks its own deps.
- * watch           = useEffect tied to one source (`answer`).
- * watchEffect     = useEffect that notices whatever you read (here: focus after the pair moves).
- * nextTick        = wait until Vue has updated the DOM (new input node after v-if).
+ * Hari 1 — reactivity & template (React mental model):
+ * ref ≈ useState, computed ≈ useMemo, watch/watchEffect ≈ useEffect
+ * template interpolation / v-bind / v-on ≈ JSX props + event handlers
  */
 import { computed, nextTick, ref, watch, watchEffect, type ComponentPublicInstance } from 'vue'
 
@@ -145,14 +140,9 @@ generateColumn()
 </script>
 
 <template>
-  <!--
-    Template ≈ the JSX you’d return.
-    {{ }} interpolation, :bind attributes, @listen to events, v-model for inputs.
-    v-if destroys nodes; v-show only hides them; v-for is .map with :key.
-  -->
   <main class="page">
     <header class="header">
-      <p class="eyebrow">Vue learning path · React → Vue</p>
+      <p class="eyebrow">Latihan Vue</p>
       <h1 class="lede">
         Tes Kraeplin: jumlahkan dua angka berurutan, tulis
         <em>digit satuan</em> hasilnya.
@@ -176,7 +166,7 @@ generateColumn()
           </div>
         </div>
         <div class="progress" aria-hidden="true">
-          <span :style="{ width: `${progress}%` }"></span>
+          <span :style="{ width: progress + '%' }"></span>
         </div>
       </aside>
 
@@ -189,13 +179,13 @@ generateColumn()
               class="digit"
               :class="{
                 active: !isFinished && (index === pairIndex || index === pairIndex + 1),
-                past: index < pairIndex,
+                past: pairIndex > index,
               }"
             >
               {{ digit }}
             </li>
 
-            <li v-if="index < digits.length - 1" class="slot">
+            <li v-if="digits.length > index + 1" class="slot">
               <input
                 v-if="index === pairIndex && !isFinished"
                 :ref="bindInput"
